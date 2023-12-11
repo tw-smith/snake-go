@@ -33,6 +33,8 @@ func main() {
 			sizey: 5,
 			style: tcell.StyleDefault.Background(tcell.ColorYellow).Foreground(tcell.ColorYellow),
 		},
+		1,
+		0,
 	}
 
 	game := Game{
@@ -45,10 +47,24 @@ func main() {
 	go game.Run()
 	for {
 		switch event := game.Screen.PollEvent().(type) {
+		case *tcell.EventResize: //TODO check what this does
+			game.Screen.Sync()
 		case *tcell.EventKey:
 			if event.Key() == tcell.KeyEscape || event.Key() == tcell.KeyCtrlC {
 				game.Screen.Fini()
 				os.Exit(0)
+			}
+			if event.Key() == tcell.KeyUp {
+				game.Snake.ChangeDirection("up")
+			}
+			if event.Key() == tcell.KeyLeft {
+				game.Snake.ChangeDirection("left")
+			}
+			if event.Key() == tcell.KeyRight {
+				game.Snake.ChangeDirection("right")
+			}
+			if event.Key() == tcell.KeyDown {
+				game.Snake.ChangeDirection("down")
 			}
 		}
 	}
