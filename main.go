@@ -69,24 +69,4 @@ func main() {
 		}
 	}
 
-	// testEl := Food{
-	// 	GameElement{
-	// 		x:     5,
-	// 		y:     5,
-	// 		sizex: 5,
-	// 		sizey: 5,
-	// 		style: tcell.StyleDefault.Background(tcell.ColorGreen).Foreground(tcell.ColorBlue),
-	// 	},
-	// }
-
-	// testEl.Draw(screen)
-	// screen.Show()
-
-	// snakeBody := SnakeBody{
-	// 	x:      5,
-	// 	y:      10,
-	// 	xSpeed: 1,
-	// 	ySpeed: 0,
-	// }
-
 }
