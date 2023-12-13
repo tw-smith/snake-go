@@ -65,6 +65,18 @@ func (g *Game) DrawSnake(s tcell.Screen, snake Snake) {
 	}
 }
 
+func (g *Game) DrawGameOver(s tcell.Screen, gameAreaHeight, gameAreaWidth, score int) {
+	row := gameAreaHeight / 2
+	col := gameAreaWidth / 2
+	style := tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorRed)
+	message := "Game Over!"
+	for _, char := range message {
+		s.SetContent(col, row, char, nil, style)
+		col++
+	}
+	s.Show()
+}
+
 func (g *Game) Run() {
 	defStyle := tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite)
 	g.Screen.SetStyle(defStyle)
@@ -77,15 +89,29 @@ func (g *Game) Run() {
 
 	for {
 		g.Screen.Clear()
-		g.Snake.Move()
+
 		g.DrawBorders(g.Screen, gameAreaWidth, gameAreaHeight)
 		g.DrawSnake(g.Screen, g.Snake)
 		g.Food.Draw(g.Screen)
-		if g.Snake.segments[0].CheckCollision([]GameElement{g.Food}) {
+
+		snakeHead := g.Snake.segments[len(g.Snake.segments)-1]
+
+		if snakeHead.CheckCollision([]GameElement{g.Food}) {
 			g.Score++
 			g.UpdateFoodPosition(gameAreaWidth, gameAreaHeight)
 			g.Snake.AddSegment()
 		}
+
+		if snakeHead.x >= gameAreaWidth || snakeHead.x <= 0 || snakeHead.y >= gameAreaHeight || snakeHead.y <= 0 {
+			g.DrawGameOver(g.Screen, gameAreaHeight, gameAreaWidth, g.Score)
+			break
+		}
+
+		if snakeHead.CheckCollision(g.Snake.segments[:(len(g.Snake.segments) - 2)]) {
+			g.DrawGameOver(g.Screen, gameAreaHeight, gameAreaWidth, g.Score)
+			break
+		}
+		g.Snake.Move()
 		g.DrawScore(g.Screen, 7, 2, 20, 2, fmt.Sprintf("Score: %d", g.Score))
 		time.Sleep(100 * time.Millisecond)
 		g.Screen.Show()

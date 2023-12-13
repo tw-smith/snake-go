@@ -1,26 +1,25 @@
 package main
 
-type SnakeSegmenter interface {
-	Move()
-}
+// type SnakeSegmenter interface {
+// 	Move()
+// }
 
-type SnakeSegment struct {
-	GameElement
-}
+// type SnakeSegment struct {
+// 	GameElement
+// }
 
 type Snake struct {
-	segments  []SnakeSegment
+	segments  []GameElement
 	xVelocity int
 	yVelocity int
 }
 
 func (snake *Snake) Move() {
-	to_append := SnakeSegment{
-		GameElement{
-			x: snake.segments[len(snake.segments)-1].x + snake.xVelocity,
-			y: snake.segments[len(snake.segments)-1].y + snake.yVelocity,
-		},
+	to_append := GameElement{
+		x: snake.segments[len(snake.segments)-1].x + snake.xVelocity,
+		y: snake.segments[len(snake.segments)-1].y + snake.yVelocity,
 	}
+
 	snake.segments = append(snake.segments, to_append)
 	snake.segments = snake.segments[1:]
 }
@@ -51,12 +50,9 @@ func (snake *Snake) ChangeDirection(direction string) {
 }
 
 func (snake *Snake) AddSegment() {
-	to_prepend := SnakeSegment{
-		GameElement{
-			x: snake.segments[0].x,
-			y: snake.segments[0].y,
-		},
+	to_prepend := GameElement{
+		x: snake.segments[0].x,
+		y: snake.segments[0].y,
 	}
-
-	snake.segments = append([]SnakeSegment{to_prepend}, snake.segments...)
+	snake.segments = append([]GameElement{to_prepend}, snake.segments...)
 }
