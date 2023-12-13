@@ -41,3 +41,14 @@ func (snake *Snake) ChangeDirection(direction string) {
 		snake.yVelocity = 1
 	}
 }
+
+func (snake *Snake) AddSegment() {
+	to_prepend := SnakeSegment{
+		GameElement{
+			x: snake.segments[0].x,
+			y: snake.segments[0].y,
+		},
+	}
+
+	snake.segments = append([]SnakeSegment{to_prepend}, snake.segments...)
+}

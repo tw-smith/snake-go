@@ -78,6 +78,7 @@ func (g *Game) Run() {
 		if g.Snake.segments[0].CheckCollision([]GameElement{g.Food}) {
 			g.Score++
 			g.UpdateFoodPosition(width, height)
+			g.Snake.AddSegment()
 		}
 		g.DrawScore(g.Screen, 7, 2, 20, 2, fmt.Sprintf("Score: %d", g.Score))
 		time.Sleep(100 * time.Millisecond)
