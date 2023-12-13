@@ -28,17 +28,25 @@ func (snake *Snake) Move() {
 func (snake *Snake) ChangeDirection(direction string) {
 	switch direction {
 	case "up":
-		snake.xVelocity = 0
-		snake.yVelocity = -1
+		if snake.yVelocity != 1 {
+			snake.xVelocity = 0
+			snake.yVelocity = -1
+		}
 	case "left":
-		snake.xVelocity = -1
-		snake.yVelocity = 0
+		if snake.xVelocity != 1 {
+			snake.xVelocity = -1
+			snake.yVelocity = 0
+		}
 	case "right":
-		snake.xVelocity = 1
-		snake.yVelocity = 0
+		if snake.xVelocity != -1 {
+			snake.xVelocity = 1
+			snake.yVelocity = 0
+		}
 	case "down":
-		snake.xVelocity = 0
-		snake.yVelocity = 1
+		if snake.yVelocity != -1 {
+			snake.xVelocity = 0
+			snake.yVelocity = 1
+		}
 	}
 }
 
