@@ -21,20 +21,24 @@ func (g *Game) UpdateFoodPosition(width int, height int) {
 	g.Food.y = rand.Intn(height)
 }
 
-func (g *Game) DrawBorders(s tcell.Screen, width int, height int) {
+func (g *Game) DrawBorders(s tcell.Screen, gameAreaWidth int, gameAreaHeight int) {
 	borderStyle := tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorPurple)
-	for i := 0; i < height; i++ {
+	for i := 0; i < gameAreaHeight; i++ {
 		s.SetContent(0, i, tcell.RuneVLine, nil, borderStyle)
 	}
-	for i := 0; i < width; i++ {
+	for i := 0; i < gameAreaWidth; i++ {
 		s.SetContent(i, 0, tcell.RuneHLine, nil, borderStyle)
 	}
-	for i := 0; i < height; i++ {
-		s.SetContent(width, i, tcell.RuneVLine, nil, borderStyle)
+	for i := 0; i < gameAreaHeight; i++ {
+		s.SetContent(gameAreaWidth, i, tcell.RuneVLine, nil, borderStyle)
 	}
-	for i := 0; i < width; i++ {
-		s.SetContent(i, height, tcell.RuneHLine, nil, borderStyle)
+	for i := 0; i < gameAreaWidth; i++ {
+		s.SetContent(i, gameAreaHeight, tcell.RuneHLine, nil, borderStyle)
 	}
+	s.SetContent(0, 0, tcell.RuneULCorner, nil, borderStyle)
+	s.SetContent(0, gameAreaHeight, tcell.RuneLLCorner, nil, borderStyle)
+	s.SetContent(gameAreaWidth, gameAreaHeight, tcell.RuneLRCorner, nil, borderStyle)
+	s.SetContent(gameAreaWidth, 0, tcell.RuneURCorner, nil, borderStyle)
 
 }
 
@@ -65,19 +69,21 @@ func (g *Game) Run() {
 	defStyle := tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite)
 	g.Screen.SetStyle(defStyle)
 	width, height := g.Screen.Size()
-	g.UpdateFoodPosition(width, height)
+	gameAreaWidth := width / 2
+	gameAreaHeight := height / 2
+	g.UpdateFoodPosition(gameAreaWidth, gameAreaHeight)
 	g.GameOver = false
 	g.Score = 0
 
 	for {
 		g.Screen.Clear()
 		g.Snake.Move()
-		g.DrawBorders(g.Screen, width, height)
+		g.DrawBorders(g.Screen, gameAreaWidth, gameAreaHeight)
 		g.DrawSnake(g.Screen, g.Snake)
 		g.Food.Draw(g.Screen)
 		if g.Snake.segments[0].CheckCollision([]GameElement{g.Food}) {
 			g.Score++
-			g.UpdateFoodPosition(width, height)
+			g.UpdateFoodPosition(gameAreaWidth, gameAreaHeight)
 			g.Snake.AddSegment()
 		}
 		g.DrawScore(g.Screen, 7, 2, 20, 2, fmt.Sprintf("Score: %d", g.Score))
