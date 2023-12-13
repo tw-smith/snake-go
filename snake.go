@@ -6,28 +6,38 @@ type SnakeSegmenter interface {
 
 type SnakeSegment struct {
 	GameElement
-	nextX int
-	nextY int
 }
 
-func (snake *SnakeSegment) Move() {
-	snake.x = snake.x + snake.nextX
-	snake.y = snake.y + snake.nextY
+type Snake struct {
+	segments  []SnakeSegment
+	xVelocity int
+	yVelocity int
 }
 
-func (snake *SnakeSegment) ChangeDirection(direction string) {
+func (snake *Snake) Move() {
+	to_append := SnakeSegment{
+		GameElement{
+			x: snake.segments[len(snake.segments)-1].x + snake.xVelocity,
+			y: snake.segments[len(snake.segments)-1].y + snake.yVelocity,
+		},
+	}
+	snake.segments = append(snake.segments, to_append)
+	snake.segments = snake.segments[1:]
+}
+
+func (snake *Snake) ChangeDirection(direction string) {
 	switch direction {
 	case "up":
-		snake.nextX = 0
-		snake.nextY = -1
+		snake.xVelocity = 0
+		snake.yVelocity = -1
 	case "left":
-		snake.nextX = -1
-		snake.nextY = 0
+		snake.xVelocity = -1
+		snake.yVelocity = 0
 	case "right":
-		snake.nextX = 1
-		snake.nextY = 0
+		snake.xVelocity = 1
+		snake.yVelocity = 0
 	case "down":
-		snake.nextX = 0
-		snake.nextY = 1
+		snake.xVelocity = 0
+		snake.yVelocity = 1
 	}
 }

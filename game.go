@@ -11,7 +11,7 @@ import (
 type Game struct {
 	Screen   tcell.Screen
 	Food     GameElement
-	Snake    SnakeSegment
+	Snake    Snake
 	Score    int
 	GameOver bool
 }
@@ -55,6 +55,12 @@ func (g *Game) DrawScore(s tcell.Screen, x1, y1, x2, y2 int, text string) {
 	}
 }
 
+func (g *Game) DrawSnake(s tcell.Screen, snake Snake) {
+	for _, segment := range snake.segments {
+		segment.Draw(s)
+	}
+}
+
 func (g *Game) Run() {
 	defStyle := tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite)
 	g.Screen.SetStyle(defStyle)
@@ -67,9 +73,9 @@ func (g *Game) Run() {
 		g.Screen.Clear()
 		g.Snake.Move()
 		g.DrawBorders(g.Screen, width, height)
-		g.Snake.Draw(g.Screen)
+		g.DrawSnake(g.Screen, g.Snake)
 		g.Food.Draw(g.Screen)
-		if g.Snake.CheckCollision([]GameElement{g.Food}) {
+		if g.Snake.segments[0].CheckCollision([]GameElement{g.Food}) {
 			g.Score++
 			g.UpdateFoodPosition(width, height)
 		}

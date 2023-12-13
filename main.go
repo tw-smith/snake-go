@@ -24,17 +24,42 @@ func main() {
 
 	defStyle := tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite)
 	screen.SetStyle(defStyle)
+	snakeStyle := tcell.StyleDefault.Background(tcell.ColorYellow).Foreground(tcell.ColorYellow)
 
-	snake := SnakeSegment{
-		GameElement{
-			x:     7,
-			y:     7,
-			sizex: 5,
-			sizey: 5,
-			style: tcell.StyleDefault.Background(tcell.ColorYellow).Foreground(tcell.ColorYellow),
+	snakeBody := []SnakeSegment{
+		{
+			GameElement{
+				x:     7,
+				y:     7,
+				sizex: 5,
+				sizey: 5,
+				style: snakeStyle,
+			},
 		},
-		1,
-		0,
+		{
+			GameElement{
+				x:     6,
+				y:     7,
+				sizex: 5,
+				sizey: 5,
+				style: snakeStyle,
+			},
+		},
+		{
+			GameElement{
+				x:     5,
+				y:     7,
+				sizex: 5,
+				sizey: 5,
+				style: snakeStyle,
+			},
+		},
+	}
+
+	snake := Snake{
+		segments:  snakeBody,
+		xVelocity: 1,
+		yVelocity: 0,
 	}
 
 	game := Game{
