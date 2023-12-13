@@ -17,8 +17,9 @@ type Game struct {
 }
 
 func (g *Game) UpdateFoodPosition(width int, height int) {
-	g.Food.x = rand.Intn(width)
-	g.Food.y = rand.Intn(height)
+	// -1 is here to stop food spawning right on the border and therefore being unreachable
+	g.Food.x = rand.Intn(width - 1)
+	g.Food.y = rand.Intn(height - 1)
 }
 
 func (g *Game) DrawBorders(s tcell.Screen, gameAreaWidth int, gameAreaHeight int) {
